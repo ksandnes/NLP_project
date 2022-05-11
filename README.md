@@ -1,6 +1,6 @@
 # NLP_project
 
-Aim: to build an isolated-word predictor for a small vocabulary and test its success rate relative to matching adult vs child-voiced single-word recordings. 
+Aim: to build an isolated-word predictor for a small vocabulary and test its success rate relative to matching adult vs child-voiced single-word recordings. Can be run in k-nearest-neighbors classification mode, where clustering and prediction is based upon via dynamic time warped (DTW) distance-costs calculated during audio-file comparison or in DTW only-mode, where prediction is solely based upon the minimum DTW value determined relative to the unknown word fed to the predictor.
 
 Instructions to test the project: 
 
