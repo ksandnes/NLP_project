@@ -4,7 +4,7 @@ Aim: to build an isolated-word predictor for a small vocabulary and test its suc
 
 Instructions to test the project: 
 
-Note - due to data privacy issues, spoken word databank not included
+NOTE - due to data privacy issues, spoken word databank not included in this repository. Instructions are historical.
 
 Download and unzip the project folder to an appropriate python3 run location on your device.
 
