@@ -18,4 +18,4 @@ a.	python book_project.py knn         (to run in DTW-KNN prediction mode)
 
 b.	python book_project.py dtw        (to run in DTW-only mode)
 
-Your output should be a progressively printed list of word predictions for 4 age-labeled test subjects along with the correct word into the terminal output, ending with a percentage success rate for each subject. To view the progress of the KNN trainer (which does take a few minutes), you can uncomment line 70.
+Your output should be a progressively printed list of word predictions for 4 age-labeled test subjects along with the correct word into the terminal output, ending with a percentage success rate for each subject. To view the progress of the KNN trainer (which does take a few minutes), uncomment line 70.
