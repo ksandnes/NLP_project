@@ -16,6 +16,8 @@ words_by_id = {1: 'cars', 2: 'cool', 3: 'dive', 4: 'drive', 5: 'eat', 6: 'for', 
 word_id = {'cars': 1, 'cool': 2, 'dive': 3, 'drive': 4, 'eat': 5, 'for': 6, 'icecream': 7, 'mars': 8, 'snacks': 9,
          'snakes': 10, 'to': 11, 'travel': 12, 'treasure': 13}
 
+age_by_id = {'2': 'toddler 1', '3': 'kindergarten', '4': 'adult', '6': 'toddler 2'}  # wrt to datafile names
+
 mfccs = {}  # dictionary of mfccs for all training files, formatted { [word]: [[mfcc1], [mfcc2], ...], [word]: etc }
 
 
@@ -139,11 +141,8 @@ if __name__ == '__main__':
     if prediction_method != 'knn' and prediction_method != 'dtw':
         print('Please include valid prediction method argument (knn or dtw) in your start command')
         exit()
-    # lists to document success rate of the predictor
-    toddler_1 = [0, 0]  # 0th index is total correct count, 1st index is total seen count
-    toddler_2 = [0, 0]
-    kindergarten = [0, 0]
-    adult = [0, 0]
+    # document success rate of the predictor
+    results = {'toddler 1': [0, 0], 'toddler 2': [0, 0], 'kindergarten': [0, 0], 'adult': [0, 0]}
     for filename in os.listdir(training_directory):  # read in files from training directory
         if filename.endswith('.wav'):
             fname = filename.split('_')
@@ -155,37 +154,24 @@ if __name__ == '__main__':
         if filename.endswith('.wav'):
             fname = filename.split('_')
             word = fname[0]
-            age = ''
-            if fname[1] == '2':
-                age = 'toddler 1'
-            elif fname[1] == '6':
-                age = 'toddler 2'
-            elif fname[1] == '3':
-                age = 'kindergarten'
-            else:
-                age = 'adult'
+            age = age_by_id[fname[1]]
             train_mfcc = extract_mfcc(test_directory + '/' + filename, word)
             prediction = predict_word_distances(train_mfcc, prediction_method)
             if prediction_method == 'knn':
                 prediction = classifier_model.predict([prediction])[0]
-            if age == 'toddler 1':
-                toddler_1[1] += 1
-                if word == words_by_id[prediction]:
-                    toddler_1[0] += 1
-            elif age == 'toddler 2':
-                toddler_2[1] += 1
-                if word == words_by_id[prediction]:
-                    toddler_2[0] += 1
-            elif age == 'kindergarten':
-                kindergarten[1] += 1
-                if word == words_by_id[prediction]:
-                    kindergarten[0] += 1
-            else:
-                adult[1] += 1
-                if word == words_by_id[prediction]:
-                    adult[0] += 1
+            results[age][1] += 1
+            if word == words_by_id[prediction]:
+                results[age][0] += 1
             print('{} -- expected word: {}, predicted word: {}'.format(age, word, words_by_id[prediction]))
-    print('toddler 1 percentage correct predicted: {}/{} = {}'.format(toddler_1[0], toddler_1[1], 100*toddler_1[0]/toddler_1[1]))
-    print('toddler 2 percentage correct predicted: {}/{} = {}'.format(toddler_2[0], toddler_2[1], 100*toddler_2[0]/toddler_2[1]))
-    print('kindergarten percentage correct predicted: {}/{} = {}'.format(kindergarten[0], kindergarten[1], 100*kindergarten[0]/kindergarten[1]))
-    print('adult percentage correct predicted: {}/{} = {}'.format(adult[0], adult[1], 100*adult[0]/adult[1]))
+    print('toddler 1 percentage correct predicted: {}/{} = {}'.format(results['toddler 1'][0], results['toddler 1'][1],
+                                                                      100 * results['toddler 1'][0] /
+                                                                      results['toddler 1'][1]))
+    print('toddler 2 percentage correct predicted: {}/{} = {}'.format(results['toddler 2'][0], results['toddler 2'][1],
+                                                                      100 * results['toddler 2'][0] /
+                                                                      results['toddler 2'][1]))
+    print('kindergarten percentage correct predicted: {}/{} = {}'.format(results['kindergarten'][0],
+                                                                         results['kindergarten'][1],
+                                                                         100 * results['kindergarten'][0] /
+                                                                         results['kindergarten'][1]))
+    print('adult percentage correct predicted: {}/{} = {}'.format(results['adult'][0], results['adult'][1],
+                                                                  100 * results['adult'][0] / results['adult'][1]))
